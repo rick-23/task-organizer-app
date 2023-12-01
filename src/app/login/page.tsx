@@ -18,7 +18,8 @@ export default function Login() {
     try {
       setLoading(true);
       const response = await axios.post("/api/login", userData);
-      console.log("Login successful", response.data);
+      console.log("Login successful");
+      router.push("/");
     } catch (error: any) {
       console.log("Login failed", error.message);
     } finally {
