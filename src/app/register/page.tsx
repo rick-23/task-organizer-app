@@ -21,7 +21,7 @@ export default function Register() {
       setLoading(true);
       const response = await axios.post("/api/register", userData);
       console.log("Signup successful");
-      //   router.push("/login");
+      router.push("/login");
     } catch (error: any) {
       console.log("Sign up error: ", error.message);
     } finally {
@@ -46,13 +46,15 @@ export default function Register() {
   }, [userData]);
 
   return (
-    <>
-      <div className="container mx-auto">
-        <h1>Register a new user</h1>
+    <section className="bg-gray-50 dark:bg-gray-900">
+      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+        <h1 className="mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
+          Register with Task Organizer
+        </h1>
         <hr />
         <h3>{loading ? "Processing" : ""}</h3>
         <hr />
-        <form className="max-w-sm mx-auto">
+        <form className="space-y-4 md:space-y-6">
           <div className="mb-5">
             <label
               htmlFor="userName-input"
@@ -65,7 +67,7 @@ export default function Register() {
               id="userName-input"
               value={userData.userName}
               placeholder="Enter your username"
-              className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               onChange={(e) =>
                 setUserData({ ...userData, userName: e.target.value })
               }
@@ -83,7 +85,7 @@ export default function Register() {
               id="email-input"
               value={userData.email}
               placeholder="Enter your email"
-              className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               onChange={(e) =>
                 setUserData({ ...userData, email: e.target.value })
               }
@@ -104,7 +106,7 @@ export default function Register() {
                 setUserData({ ...userData, password: e.target.value })
               }
               placeholder="Enter your password"
-              className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
           </div>
           {/* Todo: Implement the confirm password feature */}
@@ -118,29 +120,30 @@ export default function Register() {
             <input
               type="password"
               id="cnf-password-input"
-              className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
           </div> */}
-          <div className="mb-5">
-            <button
-              type="submit"
-              onClick={handleSignup}
-              disabled={checkButtonDisabled()}
-              className="block w-full p-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              Register
-            </button>
-          </div>
-          <div className="mb-5">
+
+          <button
+            type="submit"
+            onClick={handleSignup}
+            disabled={checkButtonDisabled()}
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          >
+            Register
+          </button>
+
+          <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+            Already have an account?{" "}
             <Link
               href="/login"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              className="font-medium text-primary-600 hover:underline dark:text-primary-500"
             >
-              Back to Login Page
+              Login here
             </Link>
-          </div>
+          </p>
         </form>
       </div>
-    </>
+    </section>
   );
 }

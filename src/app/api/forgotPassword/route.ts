@@ -5,41 +5,31 @@ import bcryptjs from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
 
 connectToDatabase();
-
 export async function POST(request: NextRequest) {
   try {
-    console.log("Registration request received");
+    console.log("Forgot password request received");
     const reqBody = await request.json();
-    const { userName, email, password } = reqBody;
+    const { email } = reqBody;
 
     // Check if user already exists
     const user = await User.findOne({ email });
-    if (user) {
+    if (!user) {
+      return NextResponse.json({ error: "User not found." }, { status: 400 });
+    }
+
+    if (!user.isVerfied) {
       return NextResponse.json(
-        {
-          error: "User already exists",
-        },
+        { error: "User not verified." },
         { status: 400 }
       );
     }
-    // Hashing the password
-    const salt = await bcryptjs.genSalt(10);
-    const hashedPassword = await bcryptjs.hash(password, salt);
-
-    const newUser = new User({
-      userName,
-      email,
-      password: hashedPassword,
-    });
-
-    const savedUser = await newUser.save();
 
     // send verification email
-    await sendEmail({ email, emailType: "VERIFY", userId: savedUser._id });
+    await sendEmail({ email, emailType: "RESET", userId: user._id });
 
-    console.log("Registration successful");
+    console.log("Forgot password request successful");
     return NextResponse.json({
-      message: "User created successfully",
+      message: "Forgot password raised successfully",
       success: true,
     });
   } catch (error: any) {
