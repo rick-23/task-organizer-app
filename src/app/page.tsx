@@ -4,6 +4,16 @@ import axios from "axios";
 import React, { FormEvent } from "react";
 import toast from "react-hot-toast";
 
+interface Task {
+  _id: string;
+  title: string;
+  description: string;
+  userId: string;
+  done: boolean;
+  createdOn: Date;
+  dueBy: Date;
+}
+
 export default function Home() {
   const [isCreateModalOpen, setCreateModalOpen] = React.useState(false);
   const [isEditModalOpen, setEditModalOpen] = React.useState(false);
@@ -14,17 +24,7 @@ export default function Home() {
     description: "",
     done: false,
   });
-  const [userTasks, setUserTasks] = React.useState<
-    {
-      _id: string;
-      title: string;
-      description: string;
-      userId: string;
-      done: boolean;
-      createdOn: Date;
-      dueBy: Date;
-    }[]
-  >([]);
+  const [userTasks, setUserTasks] = React.useState<Task[]>([]);
   const [isAddButtonDisabled, setAddButtonButtonDisabled] =
     React.useState(true);
   const [isEditButtonDisabled, setEditButtonButtonDisabled] =
@@ -93,12 +93,15 @@ export default function Home() {
     });
   };
 
-  const handleAddTaskSubmit = async (task: any) => {
+  const handleAddTaskSubmit = async (event: FormEvent) => {
+    event.preventDefault();
     try {
-      const response = await axios.post("/api/createTask", task);
+      const response = await axios.post("/api/createTask", taskData);
+      console.log(response);
       console.log("Task created successfully");
-      // await refreshTasks();
+      await refreshTasks();
     } catch (error: any) {
+      console.log(error);
       console.log("Error in creating the task:", error.message);
     } finally {
       setTaskData({
@@ -112,7 +115,8 @@ export default function Home() {
     }
   };
 
-  const handleTaskEdit = async () => {
+  const handleTaskEdit = async (event: FormEvent) => {
+    event.preventDefault();
     try {
       const taskId = taskData.taskId;
       const response = await axios.put(`/api/tasks/${taskId}`, {
@@ -122,7 +126,7 @@ export default function Home() {
         done: taskData.done,
       });
       console.log("Task updated successfully");
-      // await refreshTasks();
+      await refreshTasks();
     } catch (error: any) {
       console.log("Error in editing the task:", error.message);
     } finally {
@@ -141,9 +145,20 @@ export default function Home() {
     try {
       const response = await axios.delete(`/api/tasks/${task._id}`);
       console.log("Task deleted successfully");
-      // await refreshTasks();
+      await refreshTasks();
     } catch (error: any) {
       console.log("Error in deleting the task:", error.message);
+    }
+  };
+
+  const refreshTasks = async () => {
+    setUserTasks([]);
+    try {
+      const res = await axios.get("/api/tasks");
+      setUserTasks(res.data.data);
+    } catch (error: any) {
+      console.log(error.message);
+      toast.error(error.message);
     }
   };
 
