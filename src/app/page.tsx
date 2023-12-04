@@ -469,7 +469,10 @@ export default function Home() {
                 <tbody>
                   {userTasks.length > 0 &&
                     userTasks.map((task) => (
-                      <tr className="border-b dark:border-gray-700">
+                      <tr
+                        key={task._id}
+                        className="border-b dark:border-gray-700"
+                      >
                         <th
                           scope="row"
                           className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
